@@ -2,7 +2,7 @@ import React, {FC, useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import {ButtonProps} from './Button.models.ts';
 import {ButtonStyles} from './Button.styles.ts';
-import useGetTheme from '../../../helpers/themeHelper.ts';
+import useGetTheme from '../../../helpers/theme/themeHelper.ts';
 
 const Button: FC<ButtonProps> = ({
   title,
@@ -12,6 +12,7 @@ const Button: FC<ButtonProps> = ({
   size,
   disabled,
   renderIcon,
+  align = 'center',
 }) => {
   const [isPressed, setIsPressed] = useState(false);
 
@@ -23,6 +24,7 @@ const Button: FC<ButtonProps> = ({
     theme,
     isPressed,
     isFullWidth: !!isFullWidth,
+    align,
   });
 
   const onPressIn = () => {

@@ -174,6 +174,9 @@ export const Colors = {
   dark_submittal: 'rgb(97, 185, 30)',
   dark_state_submittal_container_hover: 'rgba(97, 185, 30,0.16)',
   dark_state_submittal_container_press: 'rgba(97, 185, 30,0.24)',
+  dark_notification_info: 'rgba(0,150,235,0.1)',
+  dark_notification_success: 'rgba(19,235,0,0.1)',
+  dark_notification_danger: 'rgba(235,0,0,0.1)',
   light_bgd_default: 'rgb(247, 247, 247)',
   light_bgd_variant: 'rgb(240, 240, 240)',
   light_srf_default: 'rgb(255,255,255)',
@@ -349,4 +352,7 @@ export const Colors = {
   light_submittal: 'rgb(97, 185, 30)',
   light_state_submittal_container_hover: 'rgba(97, 185, 30,0.16)',
   light_state_submittal_container_press: 'rgba(97, 185, 30,0.24)',
+  light_notification_info: 'rgba(0,150,235,0.1)',
+  light_notification_success: 'rgba(19,235,0,0.1)',
+  light_notification_danger: 'rgba(235,0,0,0.1)',
 };

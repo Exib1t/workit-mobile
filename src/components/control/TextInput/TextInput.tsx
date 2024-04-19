@@ -1,9 +1,9 @@
 import React, {FC} from 'react';
 import {TextInputStyles} from './TextInput.styles.ts';
 import {TextInputProps} from './TextInput.models.ts';
-import useGetTheme from '../../../helpers/themeHelper.ts';
-import {TextInput as Input} from 'react-native';
+import {Text, TextInput as Input, View} from 'react-native';
 import {Colors} from '../../../assetts/colors.ts';
+import useGetTheme from '../../../helpers/theme/themeHelper.ts';
 
 const TextInput: FC<TextInputProps> = ({
   disabled,
@@ -11,18 +11,29 @@ const TextInput: FC<TextInputProps> = ({
   onChange,
   size,
   placeholder,
+  error,
+  secureTextEntry,
 }) => {
   const theme = useGetTheme();
-  const styles = TextInputStyles({theme, disabled: !!disabled, size});
+  const styles = TextInputStyles({
+    theme,
+    disabled: !!disabled,
+    size,
+    error: !!error,
+  });
 
   return (
-    <Input
-      style={styles.container}
-      placeholder={placeholder}
-      placeholderTextColor={Colors[`${theme}_on_bgd_srf_3`]}
-      value={value}
-      onChangeText={onChange}
-    />
+    <View style={styles.container}>
+      <Input
+        style={styles.input}
+        placeholder={placeholder}
+        placeholderTextColor={Colors[`${theme}_on_bgd_srf_3`]}
+        value={value}
+        secureTextEntry={secureTextEntry}
+        onChangeText={onChange}
+      />
+      {error && <Text style={styles.error}>{error}</Text>}
+    </View>
   );
 };
 

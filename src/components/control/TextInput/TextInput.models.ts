@@ -6,9 +6,12 @@ export interface TextInputProps {
   disabled?: boolean;
   size: 'sm' | 'md';
   placeholder?: string;
+  error?: string | null;
+  secureTextEntry?: boolean;
 }
 
 export interface TextInputStylesProps extends DefaultStylesProps {
   disabled: boolean;
   size: 'sm' | 'md';
+  error: boolean;
 }

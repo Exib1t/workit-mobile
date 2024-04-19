@@ -10,6 +10,7 @@ export const ButtonStyles = ({
   disabled,
   isPressed,
   isFullWidth,
+  align,
 }: ButtonStylesProps) => {
   const backgroundColor = {
     primary: isPressed
@@ -56,7 +57,7 @@ export const ButtonStyles = ({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      alignSelf: isFullWidth ? 'stretch' : 'center',
+      alignSelf: isFullWidth ? 'stretch' : align,
       gap: 4,
       borderWidth: 1,
       paddingHorizontal: paddingHorizontal[size],

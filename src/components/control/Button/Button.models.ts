@@ -8,6 +8,7 @@ export interface ButtonStylesProps extends DefaultStylesProps {
   size: 'sm' | 'md';
   isPressed: boolean;
   isFullWidth: boolean;
+  align: 'center' | 'flex-start' | 'flex-end';
 }
 
 export interface ButtonProps {
@@ -18,4 +19,5 @@ export interface ButtonProps {
   onPress?: (event: GestureResponderEvent) => void;
   disabled?: boolean;
   renderIcon?: () => ReactNode;
+  align?: 'center' | 'flex-start' | 'flex-end';
 }

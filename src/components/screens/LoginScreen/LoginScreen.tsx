@@ -1,6 +1,5 @@
-import React, {FC, useMemo, useState} from 'react';
+import React, {FC, useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
-import useGetTheme from '../../../helpers/themeHelper.ts';
 import {LoginScreenStyles} from './LoginScreen.styles.ts';
 import TextInput from '../../control/TextInput/TextInput.tsx';
 import {LoginScreenStates} from './LoginScreen.models.ts';
@@ -9,10 +8,20 @@ import Logo from '../../common/Logo/Logo.tsx';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootNavigatorParams} from '../../../models/navigation/navigation.models.ts';
 import {ScreenNames} from '../../../navigation/routes.ts';
+import {userLoginScheme} from '../../../validators/user/user.validator.ts';
+import useGetTheme from '../../../helpers/theme/themeHelper.ts';
+import ValidationHelper from '../../../helpers/validation/validation.helper.ts';
+import {
+  IError,
+  IValidationError,
+} from '../../../models/validation/validation.models.ts';
+import {useAppDispatch, useAppSelector} from '../../../store/store.ts';
+import {loginUser} from '../../../store/reducers/user/userThunk.ts';
 
 const LoginScreen: FC<StackScreenProps<RootNavigatorParams>> = ({
   navigation,
 }) => {
+  const dispatch = useAppDispatch();
   const theme = useGetTheme();
   const styles = LoginScreenStyles({theme});
 
@@ -20,10 +29,19 @@ const LoginScreen: FC<StackScreenProps<RootNavigatorParams>> = ({
     email: '',
     password: '',
   });
+  const [errors, setErrors] = useState<IError | null>(null);
+
+  const authErrors = useAppSelector(state => state.user.errors);
 
   const isSubmitDisabled = useMemo(() => {
     return !loginData.email.trim() || !loginData.password.trim();
   }, [loginData]);
+
+  useEffect(() => {
+    if (authErrors) {
+      setErrors(ValidationHelper.transformError(authErrors));
+    }
+  }, [authErrors]);
 
   const redirectToRegister = () => {
     navigation.navigate(ScreenNames.SIGN_UP);
@@ -32,7 +50,19 @@ const LoginScreen: FC<StackScreenProps<RootNavigatorParams>> = ({
   const handleChange =
     (type: keyof LoginScreenStates['loginData']) => (value: string) => {
       setLoginData(prevState => ({...prevState, [type]: value}));
+      setErrors(null);
     };
+
+  const handleSubmit = () => {
+    try {
+      userLoginScheme.validateSync(loginData, {abortEarly: false});
+
+      dispatch(loginUser(loginData));
+    } catch (err) {
+      const error = ValidationHelper.getError(err as IValidationError);
+      setErrors(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -47,12 +77,15 @@ const LoginScreen: FC<StackScreenProps<RootNavigatorParams>> = ({
             value={loginData.email}
             onChange={handleChange('email')}
             size={'md'}
+            error={errors?.email}
           />
           <TextInput
             placeholder={'Password'}
             value={loginData.password}
             onChange={handleChange('password')}
             size={'md'}
+            error={errors?.password}
+            secureTextEntry
           />
         </View>
         <View style={styles.buttons}>
@@ -62,6 +95,7 @@ const LoginScreen: FC<StackScreenProps<RootNavigatorParams>> = ({
             size={'md'}
             disabled={isSubmitDisabled}
             isFullWidth
+            onPress={handleSubmit}
           />
           <Button
             title={'Create an account ?'}
